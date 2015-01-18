@@ -118,10 +118,10 @@ setnames(steps_by_interval, c("interval", "steps"))
 And we plot the results
 
 ```{r plot_average_steps_during_the_day}
-avg_steps <- ggplot(steps_by_interval, aes(x=interval, y=steps))
-avg_steps <- avg_steps + geom_line(colour="darkblue") +  geom_point(colour="steelblue")
-avg_steps <- avg_steps + ggtitle("Steps during the day")
-avg_steps <- avg_steps + xlab("Interval") + ylab("Steps")
+avg_steps <- ggplot(steps_by_interval, aes(x=interval, y=steps)
+    ) + geom_line(colour="darkblue"
+    ) + ggtitle("Steps during the day"
+    ) + xlab("Interval") + ylab("Steps")
 avg_steps
 ```
 
@@ -165,11 +165,10 @@ setnames(summary_total_steps, c("date", "steps"))
 And we will see it on histogram:
 
 ```{r plot_imputed_total_steps_per_day}
-new_summary <- ggplot(summary_total_steps, aes(x=steps) ) 
-new_summary <- new_summary + geom_histogram(binwidth = 1000, aes(fill = ..count..))
-new_summary <- new_summary + xlab("Total steps per day") + ylab("Steps")
-new_summary <- new_summary + ggtitle("Steps per day")
-new_summary <- new_summary + geom_rug(sides="b")
+new_summary <- ggplot(summary_total_steps, aes(x=steps) 
+    ) + geom_histogram(binwidth = 1000, aes(fill = ..count..)
+    ) + xlab("Total steps per day") + ylab("Steps"
+    ) + ggtitle("Steps per day") + geom_rug(sides="b")
 new_summary
 ```
 
@@ -201,11 +200,10 @@ setnames(day_type_mean, c("day_type", "interval", "avg_steps"))
 The best method to compare weekends with week days is to show tem on one plot:
 
 ```{r plot_by_day_type}
-plot_by_day_type <- ggplot(day_type_mean, aes(x=interval, y=avg_steps))
-plot_by_day_type <- plot_by_day_type + geom_line(colour="darkblue") + geom_point(colour="steelblue")
-plot_by_day_type <- plot_by_day_type + facet_grid(day_type ~ .)
-plot_by_day_type <- plot_by_day_type + ggtitle("Comparsion of activities in weekday and weekend")
-plot_by_day_type <- plot_by_day_type + xlab("Intervals") + ylab("Avarage Steps")
+plot_by_day_type <- ggplot(day_type_mean, aes(x=interval, y=avg_steps)
+    ) + geom_line(colour="darkblue") + facet_grid(day_type ~ .
+    ) + ggtitle("Comparsion of activities in weekday and weekend"
+    ) + xlab("Intervals") + ylab("Avarage Steps")
 plot_by_day_type
 ```
 
