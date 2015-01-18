@@ -30,6 +30,7 @@ CSV format with three variables:
 library("data.table")
 library("ggplot2")
 library("stringr")
+library("lubridate")
 ```
 
 ## Loading and preprocessing the data
@@ -64,7 +65,6 @@ adding the leading zeroes and reading date with time
 intervals <- data$interval
 intervals_hours <- str_pad(intervals, 4, pad="0")
 int_time <- strptime(paste(data$date, intervals_hours, sep=" "), format="%Y-%m-%d %H%M")
-data$dates <- as.Date(data$date, format="%Y-%m-%d")
 
 ```
 
@@ -173,4 +173,40 @@ new_summary <- new_summary + geom_rug(sides="b")
 new_summary
 ```
 
+We will check what is the change in mean and median value.
+
+```{r}
+new_mean_steps_daily <- mean(summary_total_steps$steps)
+new_median_steps_daily <- median(summary_total_steps$steps)
+```
+
+And the new mean number of steps daily is `r sprintf("%.2f", new_mean_steps_daily)` and
+the median is `r sprintf("%.2f", new_median_steps_daily)`
+
 ## Are there differences in activity patterns between weekdays and weekends?
+To distinguish week days from weekends we will prepare data with this code
+
+```{r weekdays}
+merged$date = ymd(merged$date)
+merged[weekdays(date) %in% c("Saturday", "Sunday"), day_type := 'weekend']
+merged[!weekdays(date) %in% c("Saturday", "Sunday"), day_type := 'weekday']
+```
+And we create new table:
+
+```{r means_steps_by_day_type}
+day_type_mean <- merged[,mean(steps), by=c("day_type", "interval")]
+setnames(day_type_mean, c("day_type", "interval", "avg_steps"))
+```
+
+The best method to compare weekends with week days is to show tem on one plot:
+
+```{r plot_by_day_type}
+plot_by_day_type <- ggplot(day_type_mean, aes(x=interval, y=avg_steps))
+plot_by_day_type <- plot_by_day_type + geom_line(colour="darkblue") + geom_point(colour="steelblue")
+plot_by_day_type <- plot_by_day_type + facet_grid(day_type ~ .)
+plot_by_day_type <- plot_by_day_type + ggtitle("Comparsion of activities in weekday and weekend")
+plot_by_day_type <- plot_by_day_type + xlab("Intervals") + ylab("Avarage Steps")
+plot_by_day_type
+```
+
+
