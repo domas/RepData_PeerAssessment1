@@ -203,12 +203,14 @@ hr {
 <body>
 <h1>Reproducible Research: Peer Assessment 1</h1>
 
-<p>This is a peer assesment for Coursera&#39;s course: <a href="https://class.coursera.org/repdata-010">Reproductive Research</a>. For more information, please got to the Coursera pages
+<p>This is a peer assessment for Coursera&#39;s course: 
+<a href="https://class.coursera.org/repdata-010">Reproductive Research</a>. 
+For more information, please got to the Coursera pages
 or read the README.md file that is located in the same repository.</p>
 
-<p>Author: Tomasz Domanski</p>
+<p><strong>Author</strong>: Tomasz Domanski</p>
 
-<p>Date: 18-01-2015</p>
+<p><strong>Date</strong>: 18-01-2015</p>
 
 <h2>Dataset</h2>
 
@@ -231,6 +233,8 @@ midnight would be represented as &#39;35&#39; and 13:55 will be saved as &#39;13
 
 <h2>Libraries</h2>
 
+<p>Libraries needed for code snippets to work:</p>
+
 <pre><code class="r">library(&quot;data.table&quot;)
 library(&quot;ggplot2&quot;)
 library(&quot;stringr&quot;)
@@ -239,7 +243,7 @@ library(&quot;lubridate&quot;)
 
 <h2>Loading and preprocessing the data</h2>
 
-<p>As noted in previous section, we assume that our set os already present in 
+<p>As noted in previous section, we assume that our set is already present in 
 &#39;activity.zip&#39; file, but if it&#39;s not the case, please download it and save
 as &#39;activity.zip&#39; or just run:</p>
 
@@ -249,7 +253,7 @@ as &#39;activity.zip&#39; or just run:</p>
     method=&quot;curl&quot;)
 </code></pre>
 
-<p>Dataset is ziped so we start with unziping it, then we read it and save to 
+<p>Dataset is zipped so we start with unzipping it, then we read it and save to 
 <strong>data</strong> variable.</p>
 
 <pre><code class="r">if( !file.exists(&quot;activity.csv&quot;) ){
@@ -329,7 +333,7 @@ avg_steps
 inter &lt;- steps_by_interval[steps_by_interval$steps == max_steps][1, interval]
 </code></pre>
 
-<p>The maximum number of steps is 206.17 and it occurrs
+<p>The maximum number of steps is 206.17 and it occurs
 in 835 interval</p>
 
 <h2>Imputing missing values</h2>
@@ -342,8 +346,8 @@ values we have to just count NA values in <strong>steps</strong> column</p>
 
 <p>And the result is: 2304 missing values.</p>
 
-<p>To fill the missing values in the table we will use avg values computed previusly.
-We will round the values so they will be more ralistic.</p>
+<p>To fill the missing values in the table we will use avg values computed previously.
+We will round the values so they will be more realistic.</p>
 
 <pre><code class="r">setnames(steps_by_interval, c(&quot;interval&quot;, &quot;avg_steps&quot;))
 merged &lt;- merge(data, steps_by_interval, by=&quot;interval&quot;)
@@ -436,7 +440,7 @@ merged[weekdays(date) %in% c(&quot;Saturday&quot;, &quot;Sunday&quot;), day_type
 setnames(day_type_mean, c(&quot;day_type&quot;, &quot;interval&quot;, &quot;avg_steps&quot;))
 </code></pre>
 
-<p>The best method to compare weekends with week days is to show tem on one plot:</p>
+<p>The best method to compare weekends with week days is to show them on one plot:</p>
 
 <pre><code class="r">plot_by_day_type &lt;- ggplot(day_type_mean, aes(x=interval, y=avg_steps)
     ) + geom_line(colour=&quot;darkblue&quot;) + facet_grid(day_type ~ .

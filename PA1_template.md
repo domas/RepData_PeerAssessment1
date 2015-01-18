@@ -1,11 +1,13 @@
 # Reproducible Research: Peer Assessment 1
 
-This is a peer assesment for Coursera's course: [Reproductive Research](https://class.coursera.org/repdata-010). For more information, please got to the Coursera pages
+This is a peer assessment for Coursera's course: 
+[Reproductive Research](https://class.coursera.org/repdata-010). 
+For more information, please got to the Coursera pages
 or read the README.md file that is located in the same repository.
 
-Author: Tomasz Domanski
+**Author**: Tomasz Domanski
 
-Date: 18-01-2015
+**Date**: 18-01-2015
 
 ## Dataset
 
@@ -26,6 +28,8 @@ CSV format with three variables:
 )
 
 ## Libraries
+Libraries needed for code snippets to work:
+
 
 ```r
 library("data.table")
@@ -35,7 +39,7 @@ library("lubridate")
 ```
 
 ## Loading and preprocessing the data
-As noted in previous section, we assume that our set os already present in 
+As noted in previous section, we assume that our set is already present in 
 'activity.zip' file, but if it's not the case, please download it and save
 as 'activity.zip' or just run:
 
@@ -46,7 +50,7 @@ download.file(
     method="curl")
 ```
 
-Dataset is ziped so we start with unziping it, then we read it and save to 
+Dataset is zipped so we start with unzipping it, then we read it and save to 
 **data** variable.
 
 
@@ -143,7 +147,7 @@ max_steps <- max(steps_by_interval$steps)
 inter <- steps_by_interval[steps_by_interval$steps == max_steps][1, interval]
 ```
 
-The maximum number of steps is 206.17 and it occurrs
+The maximum number of steps is 206.17 and it occurs
 in 835 interval
 
 ## Imputing missing values
@@ -157,8 +161,8 @@ missing_values_count <- sum(is.na(data$steps))
 ```
 And the result is: 2304 missing values.
 
-To fill the missing values in the table we will use avg values computed previusly.
-We will round the values so they will be more ralistic.
+To fill the missing values in the table we will use avg values computed previously.
+We will round the values so they will be more realistic.
 
 
 ```r
@@ -265,7 +269,7 @@ day_type_mean <- merged[,mean(steps), by=c("day_type", "interval")]
 setnames(day_type_mean, c("day_type", "interval", "avg_steps"))
 ```
 
-The best method to compare weekends with week days is to show tem on one plot:
+The best method to compare weekends with week days is to show them on one plot:
 
 
 ```r
