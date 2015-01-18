@@ -107,11 +107,70 @@ The mean number of steps daily is `r sprintf("%.2f", mean_steps_daily)` and
 the median is `r sprintf("%.2f", median_steps_daily)`
 
 ## What is the average daily activity pattern?
+We would like to see how average day looks like. We will prepare histogram
+that will show average number of steps taken during the day.
 
+```{r average_steps_during_the_day}
+steps_by_interval <- data[,mean(steps, na.rm=TRUE),by=interval]
+setnames(steps_by_interval, c("interval", "steps"))
+```
 
+And we plot the results
+
+```{r plot_average_steps_during_the_day}
+avg_steps <- ggplot(steps_by_interval, aes(x=interval, y=steps))
+avg_steps <- avg_steps + geom_line(colour="darkblue") +  geom_point(colour="steelblue")
+avg_steps <- avg_steps + ggtitle("Steps during the day")
+avg_steps <- avg_steps + xlab("Interval") + ylab("Steps")
+avg_steps
+```
+
+Now we will search where is the peak during the day.
+
+```{r max_steps_during_the_day}
+max_steps <- max(steps_by_interval$steps)
+inter <- steps_by_interval[steps_by_interval$steps == max_steps][1, interval]
+```
+
+The maximum number of steps is `r sprintf("%.2f", max_steps)` and it occurrs
+in `r inter` interval
 
 ## Imputing missing values
 
+Only variable **steps** contains missing values so to compute how many missing
+values we have to just count NA values in **steps** column
 
+```{r}
+missing_values_count <- sum(is.na(data$steps))
+```
+And the result is: `r missing_values_count` missing values.
+
+To fill the missing values in the table we will use avg values computed previusly.
+We will round the values so they will be more ralistic.
+
+```{r fill_missing_values}
+setnames(steps_by_interval, c("interval", "avg_steps"))
+merged <- merge(data, steps_by_interval, by="interval")
+merged$steps[is.na(merged$steps)] <- round(merged$avg_steps[is.na(merged$steps)])
+merged[,avg_steps:=NULL]
+```
+
+We will prepare new summary table that will contain last changes.
+
+```{r imputed_total_steps_per_day}
+summary_total_steps <- merged[,sum(steps),by=date]
+setnames(summary_total_steps, c("date", "steps"))
+```
+
+And we will see it on histogram:
+
+```{r plot_imputed_total_steps_per_day}
+new_summary <- ggplot(summary_total_steps, aes(x=steps) ) 
+new_summary <- new_summary + geom_histogram(binwidth = 1000, aes(fill = ..count..))
+new_summary <- new_summary + xlab("Total steps per day") + ylab("Steps")
+new_summary <- new_summary + ggtitle("Steps per day")
+new_summary <- new_summary + geom_rug(sides="b")
+new_summary
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
